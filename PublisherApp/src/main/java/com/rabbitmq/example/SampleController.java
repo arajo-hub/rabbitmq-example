@@ -1,5 +1,6 @@
 package com.rabbitmq.example;
 
+import com.rabbitmq.example.model.Student;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,16 @@ public class SampleController {
     public String samplePublish() {
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, "sample.ara.#", "RabbitMQ + Springboot = Success!");
         return "message sending!";
+    }
+
+    // 객체 메시지큐 테스트
+    @GetMapping("/sample/student")
+    public String objectPublish() {
+
+        Student student = new Student(1, "홍길동", 20, "서울특별시 강남구", "010-1234-5678");
+
+        rabbitTemplate.convertAndSend(EXCHANGE_NAME, "sample.ara.#", student);
+        return "object sending!";
     }
 
 }
